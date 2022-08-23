@@ -146,27 +146,16 @@ for milestone in DummyMilestones {
     }
 }
 
-func filterResourcesByTag(tag: Tag, resources: [Resource]) -> [Resource] {
-    var filteredResources = [Resource]()
-    for resource in resources {
-        if resource.resourceTags.contains(tag) {
-            filteredResources.append(resource)
-        }
-    }
-    return filteredResources
-}
-
-func filterResourcesByMultipleTags(tags: [Tag], resources: [Resource]) -> [Resource] {
-    var filteredResources = [Resource]()
-    for resource in resources {
+// Filter Resources By Multiple Tags
+// Function that uses the filter method to find a resource that contains every tag passed in an array of tags
+func filterResourcesByTags(tags:[Tag]) -> [Resource] {
+    return AllResource.filter { resource in
         for tag in tags {
-            if resource.resourceTags.contains(tag) {
-                filteredResources.append(resource)
-            }
+            if !resource.resourceTags.contains(tag) { return false }
         }
+        return true
     }
-    return filteredResources
 }
 
-let filteredResources = filterResourcesByMultipleTags(tags: [.test,.activity], resources: AllResource)
+let filteredResources = filterResourcesByTags(tags: [.test,.activity])
 print(filteredResources.count)
