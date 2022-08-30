@@ -157,5 +157,16 @@ func filterResourcesByTags(tags:[Tag]) -> [Resource] {
     }
 }
 
+
 let filteredResources = filterResourcesByTags(tags: [.test,.activity])
 print(filteredResources.count)
+
+// Return A Milestone By Month (Int) & Category (MilestoneCategory enum)
+func getMilestoneByMonth(month:Int, category:MilestoneCategory) -> Milestone? {
+    for milestone in DummyMilestones {
+        if milestone.milestoneMonth == month && milestone.milestoneCategory == category.rawValue {
+            return milestone
+        }
+    }
+    return nil
+}
