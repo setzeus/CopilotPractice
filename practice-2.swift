@@ -67,9 +67,7 @@ enum ResourceType:String {
     case video = "Video"
 }
 
-enum Tag:String {
-    case article = "Article"
-    case video = "Video"
+enum Tag:String, CaseIterable {
     case sleep = "Sleep"
     case health = "Health"
     case psychology = "Psychology"
@@ -89,8 +87,8 @@ enum Tag:String {
     case month10 = "Month 10"
     case month11 = "Month 11"
     case month12 = "Month 12"
-    case activity = "Activity"
-    case test = "Test"
+    case article = "Article"
+    case video = "Video"
 }
 
 // Dummy data
@@ -169,4 +167,11 @@ func getMilestoneByMonth(month:Int, category:MilestoneCategory) -> Milestone? {
         }
     }
     return nil
+}
+
+var newFilterTags:[Tag] = [Tag]()
+
+// Filter newFilterTags by removing all Tags that do not contain the string "Month" within it's rawValue
+let onlyMonthTags = newFilterTags.filter { tag in
+    return !tag.rawValue.contains("Month") || !tag.rawValue.contains("Article") || !tag.rawValue.contains("Video")
 }
