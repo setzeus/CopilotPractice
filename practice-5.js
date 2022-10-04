@@ -11,7 +11,7 @@ console.log(sortSnapShot(snapShot));
 // Function that parses through the snapShot object & returns an array of {owner, count} objects
 // where count is the number of times the owner appears in the snapShot object
 function countOwners(snapShot) {
-  var owners = {};
+  var owners = [];
   snapShot.forEach(function(item) {
     if (owners[item.owner]) {
       owners[item.owner] += 1;
@@ -22,38 +22,81 @@ function countOwners(snapShot) {
   return owners;
 }
 let snapsShotList = countOwners(snapShot);
-//console.log(snapsShotList);
+console.log(snapsShotList);
 
-// Function that parses through the snapsShotList & sums up the total count of all owners
-function sumOwnersAll(snapShotList) {
-    var total = 0;
-    for (var key in snapShotList) {
-      total += snapShotList[key];
-    }
-    return total;
+// Count all the unique owners
+function countUniqueOwners(snapsShotList) {
+  var count = 0;
+  for (var key in snapsShotList) {
+    if (snapsShotList.hasOwnProperty(key)) { count++; }
   }
-  console.log(sumOwnersAll(snapsShotList));
+  return count;
+}
+console.log("initial unique owners: " + countUniqueOwners(snapsShotList));
 
-// Function that parses through snapsShotList & rounds the count of each owner to the lowest even integer (or zero if 1)
+// Aggregate the total count of all the owners
+function aggregateOwners(snapShotList) {
+  var count = 0;
+  for (var key in snapShotList) {
+    if (snapShotList.hasOwnProperty(key)) { count += snapShotList[key]; }
+  }
+  return count;
+}
+console.log("initial item count: " + aggregateOwners(snapsShotList));
+
+// Function that parses through snapsShotList & rounds the count of each owner to the lowest even integer (or deletes the owner if the count is 1)
 function roundOwners(snapShotList) {
-    for (var key in snapShotList) {
-        if (snapShotList[key] === 1) {
-        snapShotList[key] = 0;
-        } else if (snapShotList[key] % 2 !== 0) {
-        snapShotList[key] -= 1;
-        }
+  for (var key in snapShotList) {
+    if (snapShotList[key] % 2 == 0) {
+      
+    } else if (snapShotList[key] == 1) {
+      delete snapShotList[key];
+    } else {
+      snapShotList[key] = snapShotList[key] - 1;
     }
-    return snapShotList;
+  }
+  return snapShotList;
 }
 
 let snapsShotListEvens = roundOwners(snapsShotList);
+console.log(snapsShotListEvens); 
+console.log("qualified unique owners: " + countUniqueOwners(snapsShotListEvens));
+console.log("qualified item count (pre-dividing): " + aggregateOwners(snapsShotListEvens));
+
+// Function that divides the count of each owner by 2
+function divideOwners(snapShotList) { 
+  for (var key in snapShotList) {
+    snapShotList[key] = snapShotList[key] / 2;
+  }
+  return snapShotList;
+}
+let regularQualified = divideOwners(snapsShotListEvens);
+console.log(regularQualified);
+console.log("qualified unique owners: " + countUniqueOwners(regularQualified));
+console.log("qualified item count (post-dividing): " + aggregateOwners(regularQualified));
+
 
 // Function that parses through the snapsShotListEvens & sums up the total count of all owners
-function sumOwnersEvens(snapShotListEvens) {
-  var total = 0;
-  for (var key in snapShotListEvens) {
-    total += snapShotListEvens[key];
-  }
-  return total;
-}
-console.log(sumOwnersEvens(snapsShotListEvens));
+// function sumOwnersEvens(snapShotListEvens) {
+//   var total = 0;
+//   for (var key in snapShotListEvens) {
+//     total += snapShotListEvens[key];
+//   }
+//   return total;
+// }
+// console.log(sumOwnersEvens(snapsShotListEvens));
+
+// Function that divides each owner's count by 2 or removes the owner if their count is 0
+// function divideOwners(snapShotListEvens) {
+//   for (var key in snapShotListEvens) {
+//     if (snapShotListEvens[key] === 0) {
+//       delete snapShotListEvens[key];
+//     } else {
+//       snapShotListEvens[key] /= 2;
+//     }
+//   }
+//   return snapShotListEvens;
+// }
+
+// console.log(divideOwners(snapsShotListEvens));
+// console.log(sumOwnersEvens(divideOwners(snapsShotListEvens)));
