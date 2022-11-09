@@ -6,7 +6,7 @@ function sortSnapShot(snapShot) {
     return a.id - b.id;
   });
 }
-console.log(sortSnapShot(snapShot));
+//console.log(sortSnapShot(snapShot));
 
 // Function that parses through the snapShot object & returns an array of {owner, count} objects
 // where count is the number of times the owner appears in the snapShot object
@@ -75,28 +75,47 @@ console.log(regularQualified);
 console.log("qualified unique owners: " + countUniqueOwners(regularQualified));
 console.log("qualified item count (post-dividing): " + aggregateOwners(regularQualified));
 
+let oneOfones = ["SP2G7WH7B0VXXZE5F5384W5QX23M0D2GTMXKZEC6E","SPJ52DQFJVJACKHY0QX5DRE559MBCXWTSGNBN76V", "SP2F40S465JTD7AMZ2X9SMN229617HZ9YB0HHY98A", "SP2D3RWCJEB13VNMXKQXPTGTANJPXWZQXA4ZYK3AR", "SP3EYT7KF5ERWQFTWW3SWHS8QRYBNSMRZ7JW73YXR", "SPJ52DQFJVJACKHY0QX5DRE559MBCXWTSGNBN76V", "SP047RT6C1MWW2CJ2QJRYAVYZ0BG72W190RYK3ES", "SP1YBP35K01SG2G8NG7NHSDXFSVEAKWKFEHF09PMG"];
 
-// Function that parses through the snapsShotListEvens & sums up the total count of all owners
-// function sumOwnersEvens(snapShotListEvens) {
-//   var total = 0;
-//   for (var key in snapShotListEvens) {
-//     total += snapShotListEvens[key];
-//   }
-//   return total;
-// }
-// console.log(sumOwnersEvens(snapsShotListEvens));
+// Function that parses through regularQualified & checks the keys against the oneOfones array
+// If the key is in the oneOfones array, increase count by 4
+// If a key in oneOfones is not in regularQualified, add it to regularQualified with a count of 5
+function addOneOfOnes(regularQualified, oneOfones) { 
+  for (var key in regularQualified) {
+    if (oneOfones.includes(key)) {
+      regularQualified[key] += 5;
+    }
+  }
+  for (var i = 0; i < oneOfones.length; i++) {
+    if (!regularQualified.hasOwnProperty(oneOfones[i])) {
+      regularQualified[oneOfones[i]] = 5;
+    }
+  }
+  return regularQualified;
+}
+let addedOneOfOnes = addOneOfOnes(regularQualified, oneOfones);
+console.log(addedOneOfOnes);
+console.log("qualified unique owners: " + countUniqueOwners(addedOneOfOnes));
+console.log("qualified item count (post-adding oneOfOnes): " + aggregateOwners(addedOneOfOnes));
 
-// Function that divides each owner's count by 2 or removes the owner if their count is 0
-// function divideOwners(snapShotListEvens) {
-//   for (var key in snapShotListEvens) {
-//     if (snapShotListEvens[key] === 0) {
-//       delete snapShotListEvens[key];
-//     } else {
-//       snapShotListEvens[key] /= 2;
-//     }
-//   }
-//   return snapShotListEvens;
-// }
+// Function that parses through addedOneofOnes & returns a list of keys, once for each corresponding count
+function expandOwners(addedOneOfOnes) {
+  var expanded = [];
+  for (var key in addedOneOfOnes) {
+    for (var i = 0; i < addedOneOfOnes[key]; i++) {
+      expanded.push(key);
+    }
+  }
+  return expanded;
+}
+//console.log(expandOwners(addedOneOfOnes));
 
-// console.log(divideOwners(snapsShotListEvens));
-// console.log(sumOwnersEvens(divideOwners(snapsShotListEvens)));
+// Function that parses through the expanded list & returns groups of strings appending every 100 keys separated by a comma
+function groupOwners(expanded) {
+  var groups = [];
+  for (var i = 0; i < expanded.length; i += 100) {
+    groups.push(expanded.slice(i, i + 100).join(','));
+  }
+  return groups;
+}
+console.log(groupOwners(expandOwners(addedOneOfOnes)));
